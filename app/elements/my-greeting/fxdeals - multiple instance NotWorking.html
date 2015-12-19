@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 
 <dom-module id="my-fxdeal" attributes="cptyname">
-  <template id="deal">
+  <template>
     <!--<style include="shared-styles"></style> -->
     <style>
       :horizontal-section {
@@ -118,7 +118,7 @@ paper-dialog.size-position {
     <paper-card  class="card"  elevation="3">
 <!--      <div class="card-content"> -->
 
-    <paper-button raised disabled>  {{dealCcypair::value}} - {{cptyname::value}} - {{dealType::value}} </paper-button>
+    <paper-button raised disabled>  {{dealCcypair::value}} - {{cptyname::value}}  </paper-button>
 <!--        <a href=""> {{buyorSell::value}} - {{dealCcypair::value}} - {{cptyName::value}}  </a> -->
     <section class="flex layout horizontal wrap">
         <paper-button raised class="buy" id="fxspotbuy" data-dialog="fxspotdeal"> BUY  </paper-button>
@@ -134,22 +134,20 @@ paper-dialog.size-position {
     </paper-card>
 </div>
 
-<!--<template if="{{cptyname}}"> -->
-
+<content></content>
     <paper-dialog id="fxspotdeal" class="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
 
 <paper-material class="flex layout horizontal wrap menuframe">
-<!--  <h1> Header - {{this.cptyname}} - {{cptyname::value}}</h1>
-  <h1> ccyPair - {{this.dealCcypair}} - {{dealCcypair::value}} </h1> -->
-  <paper-button class="myAction" id="insert" data-dialog="results" raised> INSERT </paper-button>
+  <h1> Header - {{this.$.cptyname::value}} - {{cptyname::value}}</h1>
+  <paper-button class="myAction" id="insert" data-dialog="results" raised>  </paper-button>
   <paper-button class="myAction" id="update" data-dialog="results" raised> UPDATE </paper-button>
   <paper-button class="myAction" id="copy" data-dialog="results" raised> COPY </paper-button>
   <paper-button class="myAction" id="replace" data-dialog="results" raised> REPLACE </paper-button>
 </paper-material>
 
       <paper-material class="flex layout horizontal wrap menuframe">
-        <paper-input class="fields" label="Deal Date" type="String" value="{{dealDate::input}}" ></paper-input>
-        <paper-input class="fields" label="Entity" type="String" value="{{dealEntity::input}}" ></paper-input>
+        <paper-input class="fields" label="Deal Date" type="String" value="{{this.dealDate::input}}" ></paper-input>
+        <paper-input class="fields" label="Entity" type="String" value="{{this.dealEntity::input}}" ></paper-input>
         <paper-input class="fields" label="Department" type="String" value="{{dealDept::input}}" ></paper-input>
         <paper-input class="fields" label="Subtype" type="String" value="{{dealSubtype::input}}" ></paper-input>
         <paper-input class="fields" label="Deal Role" type="String" value="{{dealRole::input}}" ></paper-input>
@@ -159,7 +157,7 @@ paper-dialog.size-position {
 
         <paper-input class="fields" label="Counterparty String" type="String" value="{{cptyname::input}}" ></paper-input>
         <paper-input class="fields" label="Trading Book" type="String" value="{{dealBook::input}}" ></paper-input>
-        <paper-input class="fields" label="Ccy Pair" type="String" value="{{dealCcypair::input}}" ></paper-input>
+        <paper-input class="fields" label="Ccy Pair" type="String" value="{{this.dealCcypair::input}}" ></paper-input>
         <paper-input class="fields" label="Buy Amount" type="String" value="{{dealCcy1amount::input}}" ></paper-input>
         <paper-input class="fields" label="Sell Amount" type="String" value="{{dealCcy2amount::input}}" ></paper-input>
         <paper-input class="fields" label="Spot Date" type="String" value="{{spotDate::input}}" ></paper-input>
@@ -168,8 +166,13 @@ paper-dialog.size-position {
         <paper-input id="fwdrate" class="fields" label="Fwd Rate" type="String" value="{{dealFwdrate::input}}" ></paper-input>
       </paper-material>
 
+
+            <paper-material>
+            <p> {{this.cptyname.value}} </p>
+          </paper-material>
+
     </paper-dialog>
-<!-- </template> -->
+
   </template>
 
   <script>
@@ -193,8 +196,7 @@ paper-dialog.size-position {
               },
 
               attached: function() {
-                Polymer.dom.flush();
-                //this.$.dialog.render();
+
   console.log(this.cptyname + '#' + this.dealCcypair + '#'  + ' was created');
 
 },
@@ -209,29 +211,21 @@ paper-dialog.size-position {
                   if (!button.hasAttribute('data-dialog')) {
                     return;
                   }
-                  //this.async( this.updateValues);
-
+                  this.async( this.updateValues);
                   var id = Polymer.dom(e).rootTarget.getAttribute('data-dialog');
                   //var dialog = Polymer.dom(e).getElementById(id);
                   console.log(id);
-                  //this.$.fxspotdeal.toggle();
                   var dialog = document.getElementById(id);
                   console.log(Polymer.dom(e).localTarget.getAttribute('data-dialog'));
-                  console.log(Polymer.dom(e).localTarget.querySelector('fxspotdeal'));
-                  //Polymer.dom(e).render();
-                  var model = e.model;
-                  console.log(model);
-                  console.log(dialog);
-                  //this.$.fxspotdeal.render();
-                  this.$.fxspotdeal.toggle();
-                  console.log(' Event trigerred');
+                  console.log(Polymer.dom(e).path[1]);
 
+                  var model = e.model;
+                  console.log(model.cptyname);
+                  console.log(' Event trigerred');
                   if (dialog) {
                     console.log(dialog);
-                  //  dialog.toggle();
               //      this.setDialog(true);
-                    this.$.fxspotdeal.open();
-                    //dialog.open();
+                    dialog.open();
                   }
                   console.log(this.getCptyname() + '#' + this.cptyname + '#' + this.dealCcypair + '#'  + ' was popped up');
               },
@@ -261,19 +255,11 @@ paper-dialog.size-position {
 
                             },
 
-                            _dealCcypairChanged: function(newValue, oldValue){
-                                console.log('ccy pair observer called');
-                                this.fire('dealCcypair', newValue);
-                                return;
-                            },
-
                             _cptyNameChanged: function(newValue, oldValue){
                               console.log('Cpty cptychanged is' );
                               console.log(newValue);
                               console.log(oldValue);
-                              //this.$.cptyname = newValue;
-
-                              this.notifyPath('cptyname', newValue);
+                              this.$.cptyname = newValue;
                               console.log(this.cptyname);
                               console.log(this.$.cptyname);
                               return;
@@ -360,8 +346,7 @@ paper-dialog.size-position {
           },
           dealCcypair: {
             type: String,
-            notify: true,
-            observer: '_dealCcypairChanged'
+            notify: true
           },
           dealnum: {
             type: Number,
@@ -406,10 +391,6 @@ paper-dialog.size-position {
           fwdDate: {
             type: Date,
             value: '',
-            notify: true
-          },
-          dealinvoked:{
-            type: Boolean,
             notify: true
           },
         }

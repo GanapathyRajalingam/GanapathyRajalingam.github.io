@@ -11,9 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../../../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../../../bower_components/neon-animation/animations/slide-from-left-animation.html">
@@ -26,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 
 <dom-module id="my-fxhome">
-  <template id="fxhome">
+  <template>
     <!--<style include="shared-styles"></style> -->
     <style>
       :horizontal-section {
@@ -45,9 +42,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 paper-button.green {
-  background-color: var(--paper-indigo-300);
-  /*background-color: var(--paper-blue-400);  */
-  color: white;
+  background-color: var(--paper-blue-400);
+  color: black;
   width: 15%;
   font-size: 10pt;
 }
@@ -59,7 +55,7 @@ paper-button.green[active] {
   position: relative;
   background: var(--paper-blue-700);
   color: black;
-
+  width: 40%;
 }
 
 
@@ -71,15 +67,6 @@ paper-button.green[active] {
               border-bottom: 0.1em solid blue;
             }
 
-            .footer {
-              position: fixed;bottom: 0px;
-              height: 20px;
-              padding: 20px 30px 20px 10px;
-              background-color: #D5DCFC;
-              margin: 2px;
-              border-top: 0.1em solid blue;
-              width: 100%;
-            }
 .fetch {
   top: 25%;
   right: 2%;
@@ -105,17 +92,14 @@ paper-button.green[active] {
 }
 
 .fxrates {
-  bottom: 6px;
-  top: 10px;
-  right: 5%;
+  top: 65%;
+  right: 2%;
   position: absolute;
   width: 10%;
-  height: 60%;
   overflow: auto;
   margin: 1px;
   font-size: 10pt;
-  background-color: var(--paper-indigo-300);
-  color: white;
+  padding: 20px 30px 20px 10px;
   text-align: center;
 }
 
@@ -124,16 +108,9 @@ paper-button.green[active] {
   padding: 20px 30px 20px 10px;
   background-color: white;
   margin: 10px;
-  width: auto;
+  text-align: center;
+  width: 85%;
 }
-
-  .favmenu {
-    position: relative;
-    padding: 20px 30px 20px 10px;
-    background-color: white;
-    margin: 10px;
-    width: 85%;
-  }
 
 .resp {
   position: relative; left: 100px; top: 600px;
@@ -144,31 +121,6 @@ paper-button.green[active] {
   bottom: 30%
   overflow:auto;
 }
-
-.fav{
-  position:relative;
-  left: 2%;
-  width: 15%;
-  text-align: left;
-  margin-left: 0.5%;
-  background-color: var(--paper-indigo-300);
-  overflow: auto;
-  color: white;
-}
-
-
-.favfoo{
-  position:relative;
-  left: 10px;
-  right: 10px;
-  width: 5%;
-  height: 10%;
-  text-align: center;
-  margin: 2px;
-  background-color: var(--paper-indigo-300);
-  overflow: auto;
-  color: white;
-}
     </style>
 
     <iron-ajax
@@ -177,22 +129,11 @@ paper-button.green[active] {
         params="{{param}}"
         handle-as="json"
         on-response="handleResponse"
-        last-response="{{ajaxResponse}}">
+        last-response="{{ajaxResponse}}"></iron-ajax>
     </iron-ajax>
 
-
-    <iron-ajax
-        id="dealdefval"
-        auto
-        url="../../data/dealdefval.json"
-        params="{{param}}"
-        handle-as="json"
-        on-response="handleDealDefValResponse"
-        last-response="{{dealdefvals}}">
-      </iron-ajax>
-
         <paper-toolbar>
-            <div class="title flex-direction">Finacle Treasury </div>
+            <div class="title flex-direction">Finacle Treasury - Web </div>
             <paper-icon-button icon="settings" on-tap="showList"></paper-icon-button>
             <div class="container" tabindex="0">
               <span> Ganapathy Rajalingam </span>
@@ -217,14 +158,12 @@ paper-button.green[active] {
 </div>
 
 
-<div class="footer" >
-  <section class="flex layout horizontal wrap">
-  <!--     <paper-card  class="fxrates" id="fxspotinquiry" elevation="5" >
+        <paper-card  class="fxrates" id="fxspotinquiry" elevation="5" >
             <paper-button class="myAction" id="fxrates" data-dialog="results" raised>FX RATES</paper-button>
         </paper-card>
 
         <paper-card  class="fetch" id="fxspotinquiry" elevation="5" >
-
+            <!-- <label> Deal Fetch </label> -->
             <paper-input id="dealref" label="Deal Num" type="String" value="{{dealref::input}}" ></paper-input>
             <paper-button class="myAction" id="fetch" data-dialog="results" raised>Fetch</paper-button>
         </paper-card>
@@ -232,94 +171,43 @@ paper-button.green[active] {
         <paper-card  class="blotter" id="fxspotinquiry" elevation="5" >
 
             <paper-button class="myAction" id="fxblotter" data-dialog="results" raised> Blotter </paper-button>
-        </paper-card> -->
+        </paper-card>
 
-        <paper-button  id="fxrates" class="fxrates" data-dialog="results" raised>FX RATES</paper-button>
-<!--        <paper-button  id="fxblotter" class="favfoo green"  data-dialog="results" raised> Blotter </paper-button>
-        <paper-input id="dealref"  label="Deal Num" type="String" value="{{dealref::input}}" ></paper-input>
-        <paper-button  id="fetch" class="favfoo green" data-dialog="results" raised>Fetch</paper-button>
--->
-      </section>
-  </div>
-
-<!-- Short Cuts or Favourites -->
-
-
-<paper-card  class="favmenu" elevation="1" >
-  <!--          <paper-material elevation="0"> FX SPOT Insert </paper-material> -->
-<template is="dom-if" if="{{showspot}}">
-  <paper-button id="fxspotdeals" class="fav green"  toggles raised on-click="toggle"> FX SPOT
-    <iron-icon id="fxspotdealsicon" icon="icons:chevron-right"> </iron-icon>
-  </paper-button>
-</template>
-
-<template is="dom-if" if="{{showoutr}}">
-  <paper-button id="fxoutrdeals" class="fav green" toggles raised on-click="toggleoutr"> FX OUTR
-    <iron-icon id="fxoutrdealsicon" icon="icons:chevron-right"> </iron-icon>
-  </paper-button>
-</template>
-
-<template is="dom-if" if="{{showswap}}">
-    <paper-button id="fxswapdeals" class="fav green" toggles raised on-click="toggleswap"> FX SWAP
-      <iron-icon id="fxswapdealsicon" icon="icons:chevron-right"> </iron-icon>
-    </paper-button>
-</template>
-
-</paper-card>
-
-<paper-card  class="insert" elevation="0" >
-  <iron-collapse id="collapse" >
-    <section class="flex layout horizontal wrap">
-      <template is="dom-repeat" items="{{spotarr}}">
-        <my-fxdeal deal-type={{item.dealType}} cptyname={{item.cptyname}} deal-ccypair={{item.dealCcypair}} buyor-sell={{item.buyorSell}}></my-fxdeal>
-      </template>
-    </section>
-  </iron-collapse>
-
-</paper-card>
-
-
-<paper-card  class="insert" elevation="0" >
-
-<!-- <paper-button raised noink> FX SWAP  </paper-button>  -->
-
-<iron-collapse id="collapseoutr" >
+<paper-card  class="insert" elevation="5" >
+          <!--          <paper-material elevation="0"> FX SPOT Insert </paper-material> -->
+<paper-button raised noink> FX SPOT  </paper-button>
           <section class="flex layout horizontal wrap">
-            <template is="dom-repeat" items="{{outrarr}}">
-              <my-fxdeal deal-type={{item.dealType}} cptyname={{item.cptyname}} deal-ccypair={{item.dealCcypair}} buyor-sell={{item.buyorSell}}></my-fxdeal>
-            </template>
+            <my-fxdeal id="1" deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="BUY"></my-fxdeal>
+            <my-fxdeal id="2" deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/CHF" buyor-sell="SELL"></my-fxdeal>
+            <my-fxdeal deal-type="SPOT" cptyname$={{cptyval}} deal-ccypair="EUR/GBP" buyor-sell="BUY"></my-fxdeal>
+            <my-fxdeal deal-type="SPOT" cptyname="ABN" deal-ccypair="USD/CAD" buyor-sell="SELL"></my-fxdeal>
+            <my-fxdeal deal-type="SPOT" cptyname="ABN" deal-ccypair="USD/CHF" buyor-sell="BUY"></my-fxdeal>
+        </section>
+</paper-card>
 
-    <!-- Below is hard coded approach of def values -->
-<!--            <my-fxdeal deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="BUY"></my-fxdeal>
+<paper-card  class="insert" elevation="5" >
+
+<paper-button raised noink> FX SWAP  </paper-button>
+          <section class="flex layout horizontal wrap">
+            <my-fxdeal deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="BUY"></my-fxdeal>
             <my-fxdeal deal-type="SWAP" cptyname="HSBC" deal-ccypair="EUR/CHF" buyor-sell="SELL"></my-fxdeal>
             <my-fxdeal deal-type="OUTR-SHORT" cptyname="ABN" deal-ccypair="EUR/GBP" buyor-sell="BUY"></my-fxdeal>
             <my-fxdeal deal-type="OUTR-LONG" cptyname="ABN" deal-ccypair="USD/CAD" buyor-sell="SELL"></my-fxdeal>
             <my-fxdeal deal-type="OUTR-LONG" cptyname="ABN" deal-ccypair="USD/CHF" buyor-sell="BUY"></my-fxdeal>
--->
         </section>
-</iron-collapse>
 </paper-card>
 
-<paper-card  class="insert" elevation="0" >
+<paper-card  class="insert" elevation="5" >
 
-<!-- <paper-button raised  disabled> FX OUTR  </paper-button>  -->
-<iron-collapse id="collapseswap" >
+<paper-button raised  disabled> FX OUTR  </paper-button>
           <section class="flex layout horizontal wrap">
-            <template is="dom-repeat" items="{{swaparr}}">
-              <my-fxdeal deal-type={{item.dealType}} cptyname={{item.cptyname}} deal-ccypair={{item.dealCcypair}} buyor-sell={{item.buyorSell}}></my-fxdeal>
-            </template>
-
-<!--            <my-fxdeal deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="BUY"></my-fxdeal>
+            <my-fxdeal deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="BUY"></my-fxdeal>
             <my-fxdeal deal-type="SWAP" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="SELL"></my-fxdeal>
             <my-fxdeal deal-type="OUTR-SHORT" cptyname="ABN" deal-ccypair="EUR/GBP" buyor-sell="BUY"></my-fxdeal>
             <my-fxdeal deal-type="OUTR-LONG" cptyname="ABN" deal-ccypair="EUR/GBP" buyor-sell="SELL"></my-fxdeal>
             <my-fxdeal deal-type="OUTR-LONG" cptyname="ABN" deal-ccypair="EUR/GBP" buyor-sell="BUY"></my-fxdeal>
--->
         </section>
-</iron-collapse>
-
 </paper-card>
-
     <div>
         <paper-dialog id="results" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
             <section class="flex layout horizontal wrap">
@@ -349,44 +237,6 @@ paper-button.green[active] {
         listeners: {
                 'fetch.click': 'dealfetch',
 
-              },
-
-              ready: function(){
-          //      this.spotarr = [];
-               console.log('ready fn called for fxHome');
-              },
-
-            toggle:function(){
-                var button = this.$.fxspotdealsicon;
-                this.$.collapse.toggle();
-
-                if ( this.$.collapse.opened){
-                  Polymer.dom(button).setAttribute('icon', 'arrow-drop-down');
-                } else if (!this.$.collapse.opened){
-                  Polymer.dom(button).setAttribute('icon', 'chevron-right');
-                }
-              },
-
-              toggleoutr:function(){
-                var button = this.$.fxoutrdealsicon;
-                this.$.collapseoutr.toggle();
-
-                if ( this.$.collapseoutr.opened){
-                  Polymer.dom(button).setAttribute('icon', 'arrow-drop-down');
-                } else if (!this.$.collapseoutr.opened){
-                  Polymer.dom(button).setAttribute('icon', 'chevron-right');
-                }
-              },
-
-              toggleswap:function(){
-                var button = this.$.fxswapdealsicon;
-                this.$.collapseswap.toggle();
-
-                if ( this.$.collapseswap.opened){
-                  Polymer.dom(button).setAttribute('icon', 'arrow-drop-down');
-                } else if (!this.$.collapseswap.opened){
-                  Polymer.dom(button).setAttribute('icon', 'chevron-right');
-                }
               },
 
               dealfetch: function(e){
@@ -424,49 +274,6 @@ paper-button.green[active] {
 
                             attached: function(){
                               this.deallist = [];
-                          //    this.param = {'name':'Gana','id':'1'};
-                            },
-
-                            handleDealDefValResponse: function(data){
-                              console.log('Handle response called on deal Def val ajax call');
-                              //console.log(data);
-                              //console.log(data.detail.response);
-                              this.deals = data.detail.response.dealdefvals;
-                            //  this.spotarr =[];
-                              console.log(this.deals);
-
-                              // Populating SPOT def deals and values from config---------------
-                              for ( var arr in this.deals){
-                              //  console.log(this.deals[arr].dealType);
-                                if ( this.deals[arr].dealType === 'SPOT' ){
-                                  console.log(' deal type is spot');
-                                  this.push('spotarr', this.deals[arr]);
-                                  this.showspot = true;
-                                }
-                              }
-                              // Populating OUTR def deals and values from config---------------
-                              for ( var arr in this.deals){
-                              //  console.log(this.deals[arr].dealType);
-                                if ( this.deals[arr].dealType === 'OUTR' ){
-                                  console.log(' deal type is OUTR');
-                                  this.push('outrarr', this.deals[arr]);
-                                  this.showoutr = true;
-                                }
-                              }
-                              // Populating SWAP def deals and values from config---------------
-                              for ( var arr in this.deals){
-                              //  console.log(this.deals[arr].dealType);
-                                if ( this.deals[arr].dealType === 'SWAP' ){
-                                  console.log(' deal type is SWAP');
-                                  this.push('swaparr', this.deals[arr]);
-                                  this.showswap = true;
-                                }
-                              }
-                              //console.log(this.deallist);
-                              console.log(this.spotarr);
-                              console.log('return from deal arr');
-                              //this.notifyPath('spotarr', this.spotarr);
-                              return;
                             },
         properties: {
           animationConfig: {
@@ -507,42 +314,6 @@ paper-button.green[active] {
                 'id':'1'
               };
             },
-            notify: true
-          },
-          spotarr: {
-            type: Array,
-            value: function(){
-              return [];
-            },
-            notify: true
-          },
-          outrarr: {
-            type: Array,
-            value: function(){
-              return [];
-            },
-            notify: true
-          },
-          swaparr: {
-            type: Array,
-            value: function(){
-              return [];
-            },
-            notify: true
-          },
-          showspot:{
-            type: Boolean,
-            value: false,
-            notify: true
-          },
-          showoutr:{
-            type: Boolean,
-            value: false,
-            notify: true
-          },
-          showswap:{
-            type: Boolean,
-            value: false,
             notify: true
           },
         }

@@ -73,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
         <paper-toolbar>
-            <div class="title flex-direction">Finacle Treasury - Web </div>
+            <div class="title flex-direction">Finacle Treasury </div>
             <paper-icon-button icon="settings" on-tap="showList"></paper-icon-button>
             <div class="container" tabindex="0">
               <span> Ganapathy Rajalingam </span>
@@ -83,9 +83,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div class="menuframe" >
           <section class="flex layout horizontal wrap">
-        <paper-button id="fx" toggles raised class="custom grey">Forex</paper-button>
-        <paper-button id="mm" toggles raised class="custom grey">Money Market</paper-button>
-        <paper-button id="fixedincome" toggles raised class="custom grey">Fixed Income</paper-button>
+        <paper-button id="fx" toggles raised class="custom grey" on-click="togglefx">Forex</paper-button>
+        <paper-button id="mm" toggles raised class="custom grey" on-click="togglemm">Money Market</paper-button>
+        <paper-button id="fixedincome" toggles raised class="custom grey" on-click="togglefi">Fixed Income</paper-button>
         <paper-button id="derv" toggles raised class="custom grey">Derivatives</paper-button>
         <paper-button id="accounting" toggles raised class="custom grey">Accounting</paper-button>
         <paper-button id="operations" toggles raised class="custom grey">Operations</paper-button>
