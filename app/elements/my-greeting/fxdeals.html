@@ -1,0 +1,369 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+
+<dom-module id="my-fxdeal" attributes="cpty-name">
+  <template>
+    <!--<style include="shared-styles"></style> -->
+    <style>
+      :horizontal-section {
+        display: block;
+      }
+            paper-button {
+        width: 100%;
+        margin: 10;
+      }
+
+      .card {
+
+        position: relative;
+        padding: 40px 20px 20px 30px;
+        width: 100%;
+        overflow: auto;
+        background-color: #D5DCFC;
+        margin: 10px;
+        font-size: 9pt;
+      }
+
+      paper-button:hover {
+        background-color: grey;
+        color: white;
+      }
+
+.buy {
+  background-color: var(--paper-blue-500);
+  color: white;
+  margin: 5px;
+}
+
+.sell{
+  background-color: var(--paper-red-200);
+  color: white;
+}
+      paper-dialog.colored {
+  border: 2px solid;
+  border-color: var(--paper-green-500);
+  background-color: var(--paper-light-green-50);
+  color: var(--paper-green-500);
+}
+
+paper-dialog.size-position {
+  position: relative;
+  top: 26px;
+  right: 26px;
+  width: 400px;
+  height: 400px;
+  overflow: auto;
+}
+
+.myAction{
+  position: relative;
+  background: blue;
+  color: white;
+  width: 10%;
+  overflow: auto;
+  margin: 10px;
+  text-align: center;
+  font-size: 10pt;
+}
+
+.fields {
+  position: relative;
+  width: 15%;
+  overflow: auto;
+  margin: 10px;
+  text-align: left;
+}
+
+.menuframe{
+  position: relative;
+  width: 90%;
+  left: 20px;
+  margin: 20px;
+  border-left: 0.1em solid grey;
+  border-bottom: 0.1em solid grey;
+    border-right: 0.1em solid grey;
+}
+
+
+.dialog{
+  position: absolute;
+  width: 95%;
+  height: 90%;
+  margin: 5px;
+  border-bottom: 0.1em solid grey;
+}
+    </style>
+
+<div class="flex layout horizontal wrap">
+    <paper-card  class="card"  elevation="3">
+<!--      <div class="card-content"> -->
+
+    <paper-button raised disabled>  {{dealCcypair::value}} - {{cptyName::value}}  </paper-button>
+<!--        <a href=""> {{buyorSell::value}} - {{dealCcypair::value}} - {{cptyName::value}}  </a> -->
+    <section class="flex layout horizontal wrap">
+        <paper-button raised class="buy" id="fxspotbuy" data-dialog="fxspotdeal"> BUY  </paper-button>
+        <paper-button raised class="sell" id="fxspotsell" data-dialog="fxspotdeal"> SELL </paper-button>
+    </section>
+<!--      </div> -->
+<!--      <div class="card-actions">
+         <paper-button class="myAction" raised>Insert</paper-button>
+        <a href="">INSERT</a>
+
+    </div> -->
+
+    </paper-card>
+</div>
+
+    <paper-dialog id="fxspotdeal" class="dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+
+<paper-material class="flex layout horizontal wrap menuframe">
+  <paper-button class="myAction" id="insert" data-dialog="results" raised> {{this.$.cptyName}} </paper-button>
+  <paper-button class="myAction" id="update" data-dialog="results" raised> UPDATE </paper-button>
+  <paper-button class="myAction" id="copy" data-dialog="results" raised> COPY </paper-button>
+  <paper-button class="myAction" id="replace" data-dialog="results" raised> REPLACE </paper-button>
+</paper-material>
+
+      <paper-material class="flex layout horizontal wrap menuframe">
+        <paper-input class="fields" label="Deal Date" type="String" value="{{dealDate::input}}" ></paper-input>
+        <paper-input class="fields" label="Entity" type="String" value="{{dealEntity::input}}" ></paper-input>
+        <paper-input class="fields" label="Department" type="String" value="{{dealDept::input}}" ></paper-input>
+        <paper-input class="fields" label="Subtype" type="String" value="{{dealSubtype::input}}" ></paper-input>
+        <paper-input class="fields" label="Deal Role" type="String" value="{{dealRole::input}}" ></paper-input>
+      </paper-material>
+
+      <paper-material class="flex layout horizontal wrap menuframe">
+
+        <paper-input class="fields" label="Counterparty String" type="String" value="{{cptyName::input}}" ></paper-input>
+        <paper-input class="fields" label="Trading Book" type="String" value="{{dealBook::input}}" ></paper-input>
+        <paper-input class="fields" label="Ccy Pair" type="String" value="{{dealCcypair::input}}" ></paper-input>
+        <paper-input class="fields" label="Buy Amount" type="String" value="{{dealCcy1amount::input}}" ></paper-input>
+        <paper-input class="fields" label="Sell Amount" type="String" value="{{dealCcy2amount::input}}" ></paper-input>
+        <paper-input class="fields" label="Spot Date" type="String" value="{{spotDate::input}}" ></paper-input>
+        <paper-input id="rate" class="fields" label="Spot Rate" type="String" value="{{dealSpotrate::input}}" ></paper-input>
+        <paper-input class="fields" label="Fwd Date" type="String" value="{{fwdDate::input}}" ></paper-input>
+        <paper-input id="fwdrate" class="fields" label="Fwd Rate" type="String" value="{{dealFwdrate::input}}" ></paper-input>
+      </paper-material>
+
+
+            <paper-material>
+            <p> {{this.cptyName::value}} </p>
+          </paper-material>
+
+    </paper-dialog>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'my-fxdeal',
+        behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+
+
+        listeners: {
+                'fxspotbuy.click': 'handleClick',
+                'fxspotsell.click': 'handleClick',
+                'insert.click': 'dealins',
+              },
+
+              attached: function() {
+
+  console.log(this.cptyName + '#' + this.dealCcypair + '#'  + ' was created');
+},
+
+              handleClick: function(e){
+                  var button = Polymer.dom(e).rootTarget;
+                  console.log(Polymer.dom(e).rootTarget.innerHTML);
+                  while (!button.hasAttribute('data-dialog') && button !== document.body) {
+                    button = button.parentElement;
+                  }
+                  if (!button.hasAttribute('data-dialog')) {
+                    return;
+                  }
+                  var id = button.getAttribute('data-dialog');
+                  var dialog = document.getElementById(id);
+                  console.log(' Event trigerred');
+                  if (dialog) {
+                    console.log(dialog);
+                    dialog.open();
+                  }
+                  console.log(this.cptyName + '#' + this.dealCcypair + '#'  + ' was popped up');
+              },
+
+                            dealins: function(e){
+                              var button = e.target;
+                              while (!button.hasAttribute('data-dialog') && button !== document.body) {
+                                button = button.parentElement;
+                              }
+                              if (!button.hasAttribute('data-dialog')) {
+                                return;
+                              }
+                              var id = button.getAttribute('data-dialog');
+                              var dialog = document.getElementById(id);
+                              console.log(' Event trigerred');
+                              if (dialog) {
+                                dialog.open();
+                              }
+
+                              return;
+                            },
+
+                            _cptyNameChanged: function(newValue, oldValue){
+                              console.log('Cpty cptychanged is' );
+                              console.log(newValue);
+                              console.log(oldValue);
+                              this.$.cptyName = newValue;
+                              console.log(this.cptyName);
+                              console.log(this.$.cptyName);
+                              return;
+                            },
+
+
+                                      sharedElements: {
+                                        value: function(){
+                                          return {
+                                            'hero': this.$.header
+                                          };
+                                        }
+                                      },
+
+                                      showPage: function(){
+                                        this.fire('show-page');
+                                      },
+
+
+        properties: {
+          animationConfig: {
+            value: function(){
+              return {
+                'entry':[{
+                  name: 'hero-animation',
+                  id: 'hero',
+                  toPage: this
+                }, {
+                  name: 'fade-in-animation',
+                  node:  this
+                }],
+                'exit':{
+                  name: 'fade-out-animation',
+                  node: this
+                }
+              };
+            }
+          },
+
+          cptyName: {
+            type: String,
+            value: '',
+            notify: true,
+            observer:'_cptyNameChanged',
+            reflectToAttribute: true
+          },
+          dealType: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealCcy1amount: {
+            type: Number,
+            value:0,
+            notify: true
+          },
+          dealCcy2amount: {
+            type: Number,
+            value:0,
+            notify: true
+          },
+          dealSpotrate: {
+            type: Number,
+            value: 0,
+            notify: true
+          },
+          dealDept: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealBook: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealCcypair: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealnum: {
+            type: Number,
+            value: 0,
+            notify: true
+          },
+          buyorSell: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealSubtype: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealRole: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealFwdrate: {
+            type: Number,
+            value: 0,
+            notify: true
+          },
+          dealEntity: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealDate: {
+            type: Date,
+            value: '',
+            notify: true
+          },
+          spotDate: {
+            type: Date,
+            value: '',
+            notify: true
+          },
+          fwdDate: {
+            type: Date,
+            value: '',
+            notify: true
+          },
+        }
+      });
+    })();
+  </script>
+
+</dom-module>
