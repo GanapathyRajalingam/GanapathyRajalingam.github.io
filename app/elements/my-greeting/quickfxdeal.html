@@ -1,0 +1,227 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/reverse-ripple-animation.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+
+<dom-module id="quick-fxdeal">
+  <template >
+    <!--<style include="shared-styles"></style> -->
+    <style>
+      :horizontal-section {
+        display: block;
+      }
+
+            paper-button {
+        width: 100%;
+        margin: 10;
+      }
+
+      paper-button:hover {
+        background-color: grey;
+        color: black;
+      }
+
+
+paper-button.green {
+  background-color: var(--paper-indigo-300);
+  /*background-color: var(--paper-blue-400);  */
+  color: white;
+  width: 15%;
+  font-size: 10pt;
+}
+paper-button.green[active] {
+  background-color: var(--paper-blue-700);
+}
+
+  .quickdealdialog {
+    position: relative;
+    width: 100%;
+  }
+
+  .quickfxentry {
+    position: relative;
+
+    width: 80%;
+    left: 10px;
+    text-align: left;
+  }
+
+  .qadd {
+    position: relative;
+    width: 20%;
+    height: 15%;
+    right: 5px;
+    color: white;
+    padding: 5px;
+    margin: 2%;
+    background-color: var(--paper-indigo-300);
+  }
+
+  .qinp {
+    position: relative;
+    width: 50%;
+    padding: 10px;
+    margin: 2%;
+  }
+
+  .card {
+    position: relative;
+    padding: 10px 20px 20px 20px;
+    width: 100%;
+    overflow: auto;
+    margin: 10px;
+    font-size: 9pt;
+  }
+    </style>
+
+<!--
+  <section >
+    <paper-material class="flex layout horizontal wrap">
+      <paper-label> Capture </paper-label>
+      <paper-input id="qdeal" label="Ccy Pair" class="qinp" value="{{dealCcypair::input}}"></paper-input>
+      <paper-label> trade - </paper-label>
+      <paper-fab icon="icons:check" on-click="addDeal" class="qadd" ></paper-fab>
+    </paper-material>
+  </section>
+-->
+
+<div class="flex layout horizontal wrap">
+    <paper-card  class="card flex layout horizontal wrap"  elevation="1">
+      <paper-button raised  class="qinp"> {{buyorSell::value}} - {{dealCcypair::value}} - {{cptyname::value}} - {{dealCcy1amount::value}} - {{spotDate::value}} </paper-button>
+      <paper-fab icon="icons:check" class="qadd"></paper-fab>
+    </paper-card>
+</div>
+
+
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'quick-fxdeal',
+        behaviors: [Polymer.NeonAnimatableBehavior],
+
+              ready: function(){
+          //      this.spotarr = [];
+               console.log('ready fn called for quick-fxdeal');
+              },
+
+              properties: {
+
+                cptyname: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealType: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealCcy1amount: {
+                  type: Number,
+                  value:0,
+                  notify: true
+                },
+                dealCcy2amount: {
+                  type: Number,
+                  value:0,
+                  notify: true
+                },
+                dealSpotrate: {
+                  type: Number,
+                  value: 0,
+                  notify: true
+                },
+                dealDept: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealBook: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealCcypair: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealnum: {
+                  type: Number,
+                  value: 0,
+                  notify: true
+                },
+                buyorSell: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealSubtype: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealRole: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealFwdrate: {
+                  type: Number,
+                  value: 0,
+                  notify: true
+                },
+                dealEntity: {
+                  type: String,
+                  value: '',
+                  notify: true
+                },
+                dealDate: {
+                  type: Date,
+                  value: '',
+                  notify: true
+                },
+                spotDate: {
+                  type: Date,
+                  value: '',
+                  notify: true
+                },
+                fwdDate: {
+                  type: Date,
+                  value: '',
+                  notify: true
+                },
+              }
+
+      });
+    })();
+  </script>
+
+</dom-module>

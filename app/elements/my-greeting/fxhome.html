@@ -24,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../quickfxdeal.html">
 
 <dom-module id="my-fxhome">
   <template id="fxhome">
@@ -169,6 +170,74 @@ paper-button.green[active] {
   overflow: auto;
   color: white;
 }
+
+  .quickdeal {
+    position: relative;
+    padding: 10px 20px 10px 10px;
+    background-color: white;
+    margin: 10px;
+    right: 0px;
+    width: 10%;
+  }
+
+  .quickButton{
+    position:relative;
+    left: 2%;
+    width: 100%;
+    text-align: left;
+    font-size: 10pt;
+    margin-left: 0.5%;
+    background-color: var(--paper-indigo-300);
+    overflow: auto;
+    color: white;
+  }
+
+  .quickdealdialog {
+    position: absolute;
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    overflow: auto;
+    top: 5%;
+    height: 90%;
+    bottom: 5%;
+    background-color: var(--paper-grey-50)
+  }
+
+  .quickfxentry {
+    position: relative;
+
+    width: 80%;
+    left: 10px;
+    text-align: left;
+  }
+
+  .qadd {
+    position: relative;
+    width: 5%;
+    height: 2%;
+    right: 0px;
+    left: 15%;
+    margin: 5px;
+    background-color: var(--paper-indigo-300);
+  }
+
+  .qinp {
+    position: relative;
+    width: 10%;
+    margin: 5px;
+    padding-right: 5px;
+
+  }
+
+  .dealCard {
+    position: relative;
+    padding: 40px 20px 20px 30px;
+    width: 100%;
+    overflow: auto;
+    background-color: var(--paper-grey-100);
+    margin: 10px;
+    font-size: 9pt;
+  }
     </style>
 
     <iron-ajax
@@ -267,6 +336,7 @@ paper-button.green[active] {
 
 </paper-card>
 
+<!--
 <paper-card  class="insert" elevation="0" >
   <iron-collapse id="collapse" >
     <section class="flex layout horizontal wrap">
@@ -278,6 +348,61 @@ paper-button.green[active] {
 
 </paper-card>
 
+-->
+
+<paper-card id="quickdeal" class="quickdeal" elevation="1">
+   <paper-button id="quickfx" class="quickButton" toggles raised on-click="dispquickdeals" data-dialog="quickfxdialog"> Quick FX
+     <iron-icon id="quickfxicon" icon="icons:chevron-right"> </iron-icon>
+   </paper-button>
+</paper-card>
+
+
+<paper-dialog id="quickfxdialog" class="quickdealdialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+  <section class="flex layout horizontal wrap">
+  <!--  <paper-material id="quickfxentry"  class="quickfxentry" elevation="1">  -->
+    <paper-material class="flex layout horizontal wrap">
+  <!--    <paper-label> BuyOrSell   </paper-label> -->
+      <paper-input id="qdeal" label="BuyOrSell" class="qinp" value="{{dealBuyorsell::input}}"></paper-input>
+<!--      <paper-label> Currency Pair   </paper-label> -->
+      <paper-input id="qdeal" label="Ccy Pair" class="qinp" value="{{dealCcypair::input}}"></paper-input>
+<!--      <paper-label> trade - </paper-label>  -->
+      <paper-input id="qdeal" label="Value Date" class="qinp" value="{{valDate::input}}"></paper-input>
+<!--      <paper-label> against  </paper-label> -->
+      <paper-input id="qdeal" label="Cpty Name" class="qinp" value="{{cptyval::input}}"></paper-input>
+<!--      <paper-label> Amount </paper-label> -->
+      <paper-input id="qdeal" label="Ccy1 Amount" class="qinp" value="{{dealCcy1amount::input}}"></paper-input>
+<!--      <paper-label> at </paper-label> -->
+      <paper-input id="qdeal" label="Rate" class="qinp" value="{{dealSpotrate::input}}"></paper-input>
+      <paper-fab id="qadddeal" icon="icons:add" on-click="addDeal" class="qadd" disabled$="{{dataValid}}"></paper-fab>
+    </paper-material>
+</section>
+
+<!--    <paper-material class="flex layout horizontal wrap"> -->
+      <div id="trades" class="flex layout horizontal wrap" >
+
+      </div>
+<!--    </paper-material> -->
+
+</paper-dialog>
+
+
+<paper-card  class="insert" elevation="0" >
+<iron-collapse id="collapse" >
+          <section class="flex layout horizontal wrap">
+            <template is="dom-repeat" items="{{spotarr}}">
+              <my-fxdeal deal-type={{item.dealType}} cptyname={{item.cptyname}} deal-ccypair={{item.dealCcypair}} buyor-sell={{item.buyorSell}}></my-fxdeal>
+            </template>
+
+    <!-- Below is hard coded approach of def values -->
+<!--            <my-fxdeal deal-type="SPOT" cptyname="HSBC" deal-ccypair="EUR/USD" buyor-sell="BUY"></my-fxdeal>
+            <my-fxdeal deal-type="SWAP" cptyname="HSBC" deal-ccypair="EUR/CHF" buyor-sell="SELL"></my-fxdeal>
+            <my-fxdeal deal-type="OUTR-SHORT" cptyname="ABN" deal-ccypair="EUR/GBP" buyor-sell="BUY"></my-fxdeal>
+            <my-fxdeal deal-type="OUTR-LONG" cptyname="ABN" deal-ccypair="USD/CAD" buyor-sell="SELL"></my-fxdeal>
+            <my-fxdeal deal-type="OUTR-LONG" cptyname="ABN" deal-ccypair="USD/CHF" buyor-sell="BUY"></my-fxdeal>
+-->
+        </section>
+</iron-collapse>
+</paper-card>
 
 <paper-card  class="insert" elevation="0" >
 
@@ -348,7 +473,8 @@ paper-button.green[active] {
 
         listeners: {
                 'fetch.click': 'dealfetch',
-
+                'qadddeal.click': 'addDeal',
+                'quickfx':'dispquickdeals',
               },
 
               ready: function(){
@@ -389,6 +515,52 @@ paper-button.green[active] {
                 }
               },
 
+              dispquickdeals: function(e){
+
+                var button = e.target;
+                if (!button.hasAttribute('data-dialog')) {
+                  return;
+                }
+                console.log('Quick deal button clicked');
+
+                  var id = button.getAttribute('data-dialog');
+                  console.log(id);
+
+                  var el = document.createElement('quick-fxdeal');
+                  console.log(el);
+                  var dialog = document.getElementById(id);
+
+                  console.log(' Event trigerred');
+                  console.log(Polymer.dom(this.root));
+                  console.log(Polymer.dom(this.$.trades));
+                  if (dialog) {
+                    console.log(dialog);
+
+                    this.$.quickfxdialog.open();
+                  }
+              },
+
+              addDeal: function(e) {
+                console.log('add deal called ');
+                this.showdeal = true;
+                var el = this.$.el = document.createElement('quick-fxdeal');
+                console.log(el);
+                this.$.el.dealCcypair = this.dealCcypair;
+                this.$.el.spotDate = this.valDate;
+                this.$.el.cptyname = this.cptyval;
+                this.$.el.dealSpotrate = this.dealSpotrate;
+                this.$.el.buyorSell = this.dealBuyorsell;
+                this.$.el.dealCcy1amount = this.dealCcy1amount;
+
+                Polymer.dom(this.$.trades).appendChild(el);
+                //this.$.quickfxdialog.toggle();
+                console.log(Polymer.dom(this.root));
+                console.log(this.$.trades);
+                //this.$.quickfxdialog.open();
+
+                return;
+              },
+
               dealfetch: function(e){
                 var button = e.target;
                 console.log('Calling ajax sendmsg');
@@ -415,6 +587,14 @@ paper-button.green[active] {
                 return;
               },
 
+              _validateData: function(){
+                console.log('validate data called on quick fx window');
+                if ( this.dealCcy1amount !== ''){
+                  console.log('amt set');
+                  this.dataValid = false;
+                }
+                return;
+              },
 
                             handleResponse: function(data){
                               console.log('Handled Response');
@@ -494,11 +674,6 @@ paper-button.green[active] {
             value: 0,
             notify: true
           },
-          cptyval: {
-            type: String,
-            value: 'SBI',
-            notify: true
-          },
           param: {
             type: Object,
             value: function(){
@@ -543,6 +718,42 @@ paper-button.green[active] {
           showswap:{
             type: Boolean,
             value: false,
+            notify: true
+          },
+          dataValid:{
+            type: Boolean,
+            value: true,
+            notify: true
+          },
+          dealCcypair: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          valDate: {
+            type: Date,
+            value: '',
+            notify: true
+          },
+          cptyval: {
+            type: String,
+            value: '',
+            notify: true
+          },
+          dealSpotrate: {
+            type: Number,
+            value: '',
+            notify: true
+          },
+          dealCcy1amount: {
+            type: Number,
+            value:'',
+            notify: true,
+            observer: '_validateData'
+          },
+          dealBuyorsell: {
+            type: String,
+            value: '',
             notify: true
           },
         }
