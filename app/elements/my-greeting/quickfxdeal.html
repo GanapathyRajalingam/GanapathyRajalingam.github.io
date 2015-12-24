@@ -107,14 +107,14 @@ paper-button.green[active] {
   </section>
 -->
 
+
 <div class="flex layout horizontal wrap">
     <paper-card  class="card flex layout horizontal wrap"  elevation="1">
-      <paper-button raised  class="qinp"> {{buyorSell::value}} - {{dealCcypair::value}} - {{cptyname::value}} - {{dealCcy1amount::value}} - {{spotDate::value}} </paper-button>
+      <paper-button raised  class="qinp"> {{buyorSell::value}} - {{dealCcypair::value}} - {{cptyname::value}} - {{dealCcy1amount::value}}
+         - {{spotDate::value}} </paper-button>
       <paper-fab icon="icons:check" class="qadd"></paper-fab>
     </paper-card>
 </div>
-
-
 
   </template>
 
@@ -216,6 +216,11 @@ paper-button.green[active] {
                 fwdDate: {
                   type: Date,
                   value: '',
+                  notify: true
+                },
+                toolBarTitle: {
+                  type: String,
+                  value: 'FX Quick Deal',
                   notify: true
                 },
               }

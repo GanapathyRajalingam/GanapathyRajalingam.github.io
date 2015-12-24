@@ -24,7 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
-<link rel="import" href="../quickfxdeal.html">
+<link rel="import" href="../../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../quickfxdeal.html">
 
 <dom-module id="my-fxhome">
   <template id="fxhome">
@@ -66,6 +67,9 @@ paper-button.green[active] {
 
             .menuframe {
               position: relative;
+              top: 8%;
+              left: auto;
+              width: auto;
               padding: 20px 30px 20px 10px;
               background-color: #D5DCFC;
               margin: 5px;
@@ -73,7 +77,8 @@ paper-button.green[active] {
             }
 
             .footer {
-              position: fixed;bottom: 0px;
+              position: fixed;
+              bottom: 0px;
               height: 20px;
               padding: 20px 30px 20px 10px;
               background-color: #D5DCFC;
@@ -112,7 +117,6 @@ paper-button.green[active] {
   position: absolute;
   width: 10%;
   height: 60%;
-  overflow: auto;
   margin: 1px;
   font-size: 10pt;
   background-color: var(--paper-indigo-300);
@@ -194,11 +198,10 @@ paper-button.green[active] {
 
   .quickdealdialog {
     position: absolute;
-    padding: 10px 10px 10px 10px;
+    margin: 1%;
     width: 100%;
     overflow: auto;
-    top: 5%;
-    height: 90%;
+    height: 85%;
     bottom: 5%;
     background-color: var(--paper-grey-50)
   }
@@ -238,6 +241,46 @@ paper-button.green[active] {
     margin: 10px;
     font-size: 9pt;
   }
+
+  .fxsearch {
+    position: relative;
+    text-align: left;
+    margin: 5px;
+    left: 5%;
+    width: 100%;
+    color: white;
+    text-decoration-color: white;
+  }
+
+  .list {
+  @apply(--layout-vertical);
+  padding-top: 12px;
+  background-color: var(--paper-grey-50)
+  margin: 5px;
+  @apply(--shadow-elevation-2dp);
+}
+
+.drawertoolbar {
+  background-color: var(--paper-indigo-300);
+}
+
+.drawerpanel {
+  position: relative;
+  margin: 0.5%;
+  width: 95%;
+  height: 95%;
+}
+
+.quicktitle {
+  position: relative;
+  top: 0px;
+  margin: 2px;
+}
+
+.qframe {
+  position: relative;
+  margin: 0.5%;
+}
     </style>
 
     <iron-ajax
@@ -260,6 +303,23 @@ paper-button.green[active] {
         last-response="{{dealdefvals}}">
       </iron-ajax>
 
+
+      <paper-drawer-panel id="drawer" >
+        <paper-header-panel main>
+          <paper-toolbar >
+              <paper-icon-button id="mainmenu" icon="menu" on-tap="menuToggle"></paper-icon-button>
+              <div class="title">Finacle Treasury</div>
+              <paper-icon-button icon="search"></paper-icon-button>
+              <paper-icon-button icon="settings" on-tap="showList"></paper-icon-button>
+              <div class="container" tabindex="0">
+                <span> Ganapathy Rajalingam </span>
+                <paper-badge label="4"></paper-badge>
+              </div>
+          </paper-toolbar>
+
+
+
+  <!--
         <paper-toolbar>
             <div class="title flex-direction">Finacle Treasury </div>
             <paper-icon-button icon="settings" on-tap="showList"></paper-icon-button>
@@ -268,7 +328,7 @@ paper-button.green[active] {
               <paper-badge label="4"></paper-badge>
             </div>
         </paper-toolbar>
-
+-->
 <!-- BELOW MENU WHICH IS RETAINED ACROSS SCREENS SHOULD BE FIXED WHEN TRAVERSING THRO MULTIPLE PAGES -->
 
         <div class="menuframe" >
@@ -282,9 +342,8 @@ paper-button.green[active] {
         <!--  <div>
             <my-fxdeal deal-type="FX-OUTR-SHORT" cpty-name="ABN" deal-ccypair="EUR/GBP"></my-fxdeal>
           </div> -->
-        </section>
-</div>
-
+          </section>
+        </div>
 
 <div class="footer" >
   <section class="flex layout horizontal wrap">
@@ -358,31 +417,65 @@ paper-button.green[active] {
 
 
 <paper-dialog id="quickfxdialog" class="quickdealdialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+  <paper-drawer-panel id="fxdrawer" class="drawerpanel">
+    <paper-header-panel drawer>
+      <paper-toolbar class="drawertoolbar flex layout horizontal wrap">
+
+    <!--      <div class="quicktitle">FX Quick Search </div> -->
+          <paper-input id="fxsearch" class="fxsearch" label="FX Quick Search" value="{{quickfav::input}}"></paper-input>
+    <!--      <paper-icon-button icon="search"></paper-icon-button> -->
+          </paper-toolbar>
+
+
+          <paper-listbox  class="list" >
+    <!--        <template is="dom-if" if="{{showfav}}"> -->
+            <template is="dom-repeat" id="favitems" items="{{filteredfav}}">
+            <paper-item  on-tap="onFavItemClick" >
+              <paper-item-body two-line class="layout vertical">
+
+                <div> {{item.dealType::value}} -  {{item.buyorSell::value}} - {{item.dealCcypair::value}} - {{item.cptyname::value}} </div>
+
+              </paper-item-body>
+            </paper-item>
+          </template>
+  <!--      </template> -->
+          </paper-listbox>
+
+
+    </paper-header-panel>
+
+    <paper-header-panel main selected >
+      <paper-toolbar >
+          <paper-icon-button icon="menu" on-tap="fxmenuToggle"></paper-icon-button>
+          <div class="title">FX Quick Deal</div>
+          <paper-icon-button icon="search"></paper-icon-button>
+      </paper-toolbar>
+
   <section class="flex layout horizontal wrap">
-  <!--  <paper-material id="quickfxentry"  class="quickfxentry" elevation="1">  -->
-    <paper-material class="flex layout horizontal wrap">
-  <!--    <paper-label> BuyOrSell   </paper-label> -->
+
+    <paper-material class="qframe flex layout horizontal wrap">
+
       <paper-input id="qdeal" label="BuyOrSell" class="qinp" value="{{dealBuyorsell::input}}"></paper-input>
-<!--      <paper-label> Currency Pair   </paper-label> -->
+
       <paper-input id="qdeal" label="Ccy Pair" class="qinp" value="{{dealCcypair::input}}"></paper-input>
-<!--      <paper-label> trade - </paper-label>  -->
+
       <paper-input id="qdeal" label="Value Date" class="qinp" value="{{valDate::input}}"></paper-input>
-<!--      <paper-label> against  </paper-label> -->
+
       <paper-input id="qdeal" label="Cpty Name" class="qinp" value="{{cptyval::input}}"></paper-input>
-<!--      <paper-label> Amount </paper-label> -->
+
       <paper-input id="qdeal" label="Ccy1 Amount" class="qinp" value="{{dealCcy1amount::input}}"></paper-input>
-<!--      <paper-label> at </paper-label> -->
+
       <paper-input id="qdeal" label="Rate" class="qinp" value="{{dealSpotrate::input}}"></paper-input>
       <paper-fab id="qadddeal" icon="icons:add" on-click="addDeal" class="qadd" disabled$="{{dataValid}}"></paper-fab>
     </paper-material>
 </section>
 
-<!--    <paper-material class="flex layout horizontal wrap"> -->
       <div id="trades" class="flex layout horizontal wrap" >
 
       </div>
-<!--    </paper-material> -->
 
+</paper-header-panel>
+</paper-drawer-panel>
 </paper-dialog>
 
 
@@ -461,6 +554,9 @@ paper-button.green[active] {
         </paper-dialog>
   </div>
 
+</paper-header-panel>
+</paper-drawer-panel>
+
   </template>
 
   <script>
@@ -479,8 +575,39 @@ paper-button.green[active] {
 
               ready: function(){
           //      this.spotarr = [];
+               //this.param = [];
                console.log('ready fn called for fxHome');
+               this.filteredfav = this.deals;
+               this.menuToggle();
               },
+
+              onFavItemClick: function(e){
+                console.log('fav item clickd');
+                //console.log(this.$.favitems.itemForElement(e.target));
+                //console.log(this.$.favitems.items);
+                this.selectedFavitem = this.$.favitems.itemForElement(e.target);
+                //console.log(this.selectedFavitem);
+                this.dealCcypair = this.selectedFavitem.dealCcypair;
+                this.cptyval = this.selectedFavitem.cptyname;
+                this.dealType = this.selectedFavitem.dealType;
+                this.dealBuyorsell = this.selectedFavitem.buyorSell;
+              },
+
+              menuToggle: function() {
+                if (this.$.drawer.narrow && this.$.drawer.getBoundingClientRect().width < parseInt(this.$.drawer.responsiveWidth)) {
+                    this.$.drawer.togglePanel();
+                  } else {
+                    this.$.drawer.forceNarrow = !this.$.drawer.forceNarrow;
+                  }
+                },
+
+                fxmenuToggle: function() {
+                  if (this.$.fxdrawer.narrow && this.$.fxdrawer.getBoundingClientRect().width < parseInt(this.$.fxdrawer.responsiveWidth)) {
+                      this.$.fxdrawer.togglePanel();
+                    } else {
+                      this.$.fxdrawer.forceNarrow = !this.$.fxdrawer.forceNarrow;
+                    }
+                  },
 
             toggle:function(){
                 var button = this.$.fxspotdealsicon;
@@ -604,14 +731,16 @@ paper-button.green[active] {
 
                             attached: function(){
                               this.deallist = [];
-                          //    this.param = {'name':'Gana','id':'1'};
+
+                            //  this.param = {'name':'Gana','id':'1'};
                             },
 
                             handleDealDefValResponse: function(data){
                               console.log('Handle response called on deal Def val ajax call');
-                              //console.log(data);
-                              //console.log(data.detail.response);
+                              console.log(data);
+                              console.log(data.detail.response);
                               this.deals = data.detail.response.dealdefvals;
+                              this.filteredfav = this.deals;
                             //  this.spotarr =[];
                               console.log(this.deals);
 
@@ -642,12 +771,38 @@ paper-button.green[active] {
                                   this.showswap = true;
                                 }
                               }
+                              this.showfav = true;
                               //console.log(this.deallist);
                               console.log(this.spotarr);
                               console.log('return from deal arr');
                               //this.notifyPath('spotarr', this.spotarr);
                               return;
                             },
+
+                            _filterfav: function(){
+                                console.log('filter fav called ');
+                                console.log(this.quickfav);
+                                this.filteredfav = [];
+
+                                for ( var arr in this.deals){
+                                  console.log(this.deals[arr].dealType);
+                                  if (( this.deals[arr].dealType.includes(this.quickfav)) ||
+                                      ( this.deals[arr].dealCcypair.includes(this.quickfav)) ||
+                                      ( this.deals[arr].cptyname.includes(this.quickfav)) ||
+                                      ( this.deals[arr].buyorSell.includes(this.quickfav))
+                                    ){
+                                    console.log(' deal type is SWAP');
+                                    this.push('filteredfav', this.deals[arr]);
+                                  }
+                                }
+
+                                if (this.quickfav === ''){
+                                  this.filteredfav = this.deals;
+                                }
+                                console.log('post filter');
+                                console.log(this.filteredfav);
+                            },
+
         properties: {
           animationConfig: {
             value: function(){
@@ -720,6 +875,11 @@ paper-button.green[active] {
             value: false,
             notify: true
           },
+          showfav:{
+            type: Boolean,
+            value: false,
+            notify: true
+          },
           dataValid:{
             type: Boolean,
             value: true,
@@ -750,12 +910,34 @@ paper-button.green[active] {
             value:'',
             notify: true,
             observer: '_validateData'
+
           },
           dealBuyorsell: {
             type: String,
             value: '',
             notify: true
           },
+          quickfav: {
+            type: String,
+            value: '',
+            notify: true,
+            observer: '_filterfav'
+          },
+          filteredfav: {
+            type: Array,
+            notify: true,
+            value: function(){
+              return [];
+            }
+          },
+          favsel: {
+            type: Number,
+            notify: true
+          },
+          selectedFavitem: {
+            type: Object,
+            notify: true
+          }
         }
       });
     })();
