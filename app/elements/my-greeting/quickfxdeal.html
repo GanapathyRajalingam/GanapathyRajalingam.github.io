@@ -70,30 +70,45 @@ paper-button.green[active] {
 
   .qadd {
     position: relative;
-    width: 20%;
-    height: 15%;
-    right: 5px;
+    width: 8%;
+    height: 4%;
     color: white;
     padding: 5px;
     margin: 2%;
     background-color: var(--paper-indigo-300);
+/*    display: none;  */
   }
 
   .qinp {
     position: relative;
-    width: 50%;
+    width: 95%;
     padding: 10px;
     margin: 2%;
   }
 
   .card {
     position: relative;
-    padding: 10px 20px 20px 20px;
+    padding: 10px 10px 10px 10px;
     width: 100%;
     overflow: auto;
     margin: 10px;
     font-size: 9pt;
   }
+
+  .dealactions {
+      position: relative;
+      width: 12%;
+      height: 5%;
+      color: white;
+      padding: 5px;
+      margin: 2%;
+      background-color: var(--paper-indigo-300);
+  }
+
+/*.dealactions:hover + .qadd {
+  display: block;
+}
+*/
     </style>
 
 <!--
@@ -112,7 +127,18 @@ paper-button.green[active] {
     <paper-card  class="card flex layout horizontal wrap"  elevation="1">
       <paper-button raised  class="qinp"> {{buyorSell::value}} - {{dealCcypair::value}} - {{cptyname::value}} - {{dealCcy1amount::value}}
          - {{spotDate::value}} </paper-button>
-      <paper-fab icon="icons:check" class="qadd"></paper-fab>
+
+      <paper-fab id="actmenu" icon="icons:more-vert" class="dealactions" on-click="toggleact"></paper-fab>
+
+      <!--<iron-collapse id="dealactions"> -->
+    <template is="dom-if" if="{{showqadd}}">
+      <paper-fab icon="icons:done-all" class="qadd"></paper-fab>
+      <paper-fab icon="icons:payment" class="qadd"></paper-fab>
+      <paper-fab icon="icons:content-copy" class="qadd"></paper-fab>
+      <paper-fab icon="icons:delete" class="qadd"></paper-fab>
+      <paper-fab icon="icons:launch" class="qadd"></paper-fab>
+    </template>
+<!--  </iron-collapse> -->
     </paper-card>
 </div>
 
@@ -130,6 +156,25 @@ paper-button.green[active] {
           //      this.spotarr = [];
                console.log('ready fn called for quick-fxdeal');
               },
+
+              toggleact:function(){
+                console.log('act toggle');
+                  //var button = this.$.actmenu;
+                  //this.$.dealactions.toggle();
+                  console.log(this.showqadd);
+                  if ( this.showqadd ){
+                    console.log('true ent');
+                    this.showqadd = false;
+                  } else if ( !this.showqadd){
+                    console.log('false ent');
+                    this.showqadd = true;
+                  }
+          //        if ( this.$.dealactions.opened){
+          //          Polymer.dom(button).setAttribute('icon', 'icons:more-horiz');
+          //        } else if (!this.$.dealactions.opened){
+          //          Polymer.dom(button).setAttribute('icon', 'icons:more-vert');
+          //        }
+                },
 
               properties: {
 
@@ -221,6 +266,11 @@ paper-button.green[active] {
                 toolBarTitle: {
                   type: String,
                   value: 'FX Quick Deal',
+                  notify: true
+                },
+                showqadd: {
+                  type: Boolean,
+                  value: false,
                   notify: true
                 },
               }
