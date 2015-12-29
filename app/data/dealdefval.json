@@ -3,7 +3,6 @@
     {"dealType":"SPOT", "cptyname":"HSBC","dealCcypair":"EUR/USD", "buyorSell": "BUY"},
     {"dealType":"SWAP", "cptyname":"SBI","dealCcypair":"GBP/USD", "buyorSell": "SELL"},
     {"dealType":"OUTR", "cptyname":"ABN","dealCcypair":"CAD/USD", "buyorSell": "BUY"},
-    {"dealType":"OUTR", "cptyname":"ICICI","dealCcypair":"CAD/CHF", "buyorSell": "BUY"},
     {"dealType":"SPOT", "cptyname":"CITI","dealCcypair":"USD/CHF", "buyorSell": "SELL"},
     {"dealType":"SWAP", "cptyname":"AXIS","dealCcypair":"USD/INR", "buyorSell": "SELL"}
   ]

@@ -330,6 +330,16 @@ paper-button.green[active] {
         last-response="{{dealdefvals}}">
       </iron-ajax>
 
+      <iron-ajax
+          id="fxratesdata"
+          auto
+          url="../../data/fxrates.json"
+          params="{{param}}"
+          handle-as="json"
+          on-response="handleFxRateResponse"
+          last-response="{{fxratesd}}">
+        </iron-ajax>
+
 
       <paper-drawer-panel id="drawer" >
         <paper-header-panel main>
@@ -389,7 +399,7 @@ paper-button.green[active] {
             <paper-button class="myAction" id="fxblotter" data-dialog="results" raised> Blotter </paper-button>
         </paper-card> -->
 
-        <paper-button  id="fxrates" class="fxrates" data-dialog="results" raised>FX RATES</paper-button>
+        <paper-button  id="fxrates" class="fxrates" on-click="dispfxrates" data-dialog="fxratesdisp" raised>FX RATES</paper-button>
 <!--        <paper-button  id="fxblotter" class="favfoo green"  data-dialog="results" raised> Blotter </paper-button>
         <paper-input id="dealref"  label="Deal Num" type="String" value="{{dealref::input}}" ></paper-input>
         <paper-button  id="fetch" class="favfoo green" data-dialog="results" raised>Fetch</paper-button>
@@ -441,6 +451,12 @@ paper-button.green[active] {
      <iron-icon id="quickfxicon" icon="icons:chevron-right"> </iron-icon>
    </paper-button>
 </paper-card>
+
+
+<paper-dialog id="fxratesdisp" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+  <div id="dispfxrate" width="950" height="950"> </div>
+
+</paper-dialog>
 
 
 <paper-dialog id="quickfxdialog" class="quickdealdialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
@@ -611,6 +627,7 @@ paper-button.green[active] {
                 'fetch.click': 'dealfetch',
                 'qadddeal.click': 'addDeal',
                 'quickfx':'dispquickdeals',
+                'fxrates.click': 'dispfxrates',
               },
 
               ready: function(){
@@ -707,6 +724,37 @@ paper-button.green[active] {
                   }
               },
 
+              dispfxrates: function(e) {
+                console.log(' display fx rates called');
+                var button = e.target;
+                if (!button.hasAttribute('data-dialog')) {
+                  return;
+                }
+                console.log('fxrates  button clicked');
+
+                  var id = button.getAttribute('data-dialog');
+                  console.log(id);
+
+                  var el1 = this.$.el1 = document.createElement('my-chart');
+
+                  this.$.el1.data  = this.fxratesval;
+                  console.log(this.fxratesval);
+                  console.log(this.$.el1.data);
+                  console.log(el1);
+                  var dialog = document.getElementById(id);
+
+                  Polymer.dom(this.$.dispfxrate).appendChild(el1);
+
+                  console.log(' Event trigerred');
+                  console.log(Polymer.dom(this.root));
+                  console.log(Polymer.dom(this.$.dispfxrate));
+                  if (dialog) {
+                    console.log(dialog);
+                    //this.$.fxratesdisp.toggle();
+                    this.$.fxratesdisp.open();
+                  }
+              },
+
               addDeal: function(e) {
                 console.log('add deal called ');
                 this.showdeal = true;
@@ -773,6 +821,16 @@ paper-button.green[active] {
                               this.deallist = [];
 
                             //  this.param = {'name':'Gana','id':'1'};
+                            },
+
+                            handleFxRateResponse: function(data){
+                              console.log('handle fxrates called ');
+                              console.log(data);
+                              console.log(data.detail.response);
+                              this.fxratesval = data.detail.response.fxratesd;
+                              console.log(this.fxratesval);
+                              this.showrates = true;
+                              return;
                             },
 
                             handleDealDefValResponse: function(data){
@@ -920,6 +978,12 @@ paper-button.green[active] {
             value: false,
             notify: true
           },
+          showrates:{
+            type: Boolean,
+            value: false,
+            notify: true
+          },
+
           dataValid:{
             type: Boolean,
             value: true,

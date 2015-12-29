@@ -1,0 +1,37 @@
+{
+  "name": "poly-nvd3",
+  "version": "1.4.1",
+  "authors": [
+    "RenatoUtsch <renatoutsch@gmail.com>"
+  ],
+  "description": "Polymer wrapper for the nvd3 library",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "d3",
+    "nvd3"
+  ],
+  "main": "poly-nvd3.html",
+  "license": "BSD",
+  "homepage": "https://github.com/RenatoUtsch/poly-nvd3/",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "nvd3": "novus/nvd3#^1.8.1",
+    "d3-import": "^1.0.0",
+    "d3": "^3.4.4",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#~1.0.2",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
+    "iron-ajax": "PolymerElements/iron-ajax#~1.0.4"
+  },
+  "_release": "1.4.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.4.1",
+    "commit": "5dc3a18ab601a593012c930877a75f026ac15744"
+  },
+  "_source": "git://github.com/RenatoUtsch/poly-nvd3.git",
+  "_target": "~1.4.1",
+  "_originalSource": "poly-nvd3",
+  "_direct": true
+}

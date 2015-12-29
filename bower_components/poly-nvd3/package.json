@@ -1,0 +1,7 @@
+{
+  "name": "poly-nvd3",
+  "version": "1.4.1",
+  "engines": {
+    "node": ">= 0.10.0"
+  }
+}

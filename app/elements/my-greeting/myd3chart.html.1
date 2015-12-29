@@ -1,0 +1,75 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/reverse-ripple-animation.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../../bower_components/poly-nvd3/nvd3-behavior.html">
+<link rel="import" href="../../../bower_components/nvd3/build/nv.d3.min.css">
+
+<script src="../../../bower_components/d3/d3.js"></script>
+<script src="../../../bower_components/d3/d3.min.js"></script>
+<script src="../../../bower_components/nvd3/build/nv.d3.min.js"></script>
+
+
+<dom-module id="my-d3chart">
+
+  <script>
+    (function() {
+      
+      Polymer({
+        is: 'my-d3chart',
+        nvModel: nv.models.lineChart(),
+        behaviors: [NVD3Behavior],
+        onCreate: function(chart, svg) {
+          console.log('on create called in my chart');
+            chart.useInteractiveGuideline(true);
+          },
+
+              ready: function(){
+          //      this.spotarr = [];
+               console.log('ready fn called for my-d3chart');
+              },
+
+              properties: {
+    data: {
+        type: Object,
+        value: function() {
+            return [
+                {
+                    'key': 'Line 1',
+                    'values': [
+                        {'x': 0, 'y': 1},
+                        {'x': 1, 'y': 2},
+                        {'x': 2, 'y': 3}
+                    ]
+                }
+            ];
+        }
+    }
+},
+      });
+    })();
+  </script>
+
+</dom-module>

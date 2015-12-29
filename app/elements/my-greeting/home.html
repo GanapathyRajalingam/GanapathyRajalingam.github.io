@@ -28,6 +28,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 
+<link rel="import" href="myplottablechart.html">
+
 <dom-module id="my-home">
   <template>
     <!--<style include="shared-styles"></style> -->
@@ -95,12 +97,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!-- </paper-fab> -->
         </section>
         </div>
+        <h2> Chart here </h2>
+        <div>
+        <tf-chart
+                      type="scalar"
+                      id="chart"
+                      on-keyup="toggleSelected"
+                      tabindex="2"
+                      ></tf-chart>
+      </div>
 
-
+        <!--
                 <div style="height:500px; width:500px">
                   <iframe style="height:500px; width:500px" src="http://10.94.81.125:8080/MyView/index#/myViewWidget?Project=Project15&Sheet=Sheet1"> </iframe>
                 </div>
-
+              -->
         <paper-menu-button>
           <paper-icon-button icon="arrow-forward" ></paper-icon-button>
           <paper-menu >

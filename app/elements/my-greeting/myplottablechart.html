@@ -1,0 +1,168 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/reverse-ripple-animation.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+
+<link rel="import" href="plottable.html">
+<link rel="import" href="lodash.html">
+<!--
+tf-chart (TFChart) creates an element that draws a line chart for dispalying event values.
+It has the following settable properties:
+  tag: (required, string) - the name of the tag to load for this chart
+  selectedRuns: (required, string[]) - the runs the chart should display
+  xType: (required, string) - the way to display x values - allows "step" or "wall_time"
+  dataCoordinator: (required, TF.DataCoordinator) - the data coordinator for talking to backend
+  colorScale: (required, Plottable.Scales.Color) - maps from runs to colors
+  tooltipUpdater: (required, function) - allows the chart to modify tooltips
+It exposes the following methods:
+  redraw() - cause the chart to re-render (useful if e.g. container size changed)
+The data is expected to be an array of [wall_time, step, value] arrays.
+The wall_time is serialized as seconds since epoch.
+-->
+<dom-module id="my-chart">
+  <template>
+    <svg id="chartsvg" width="450" height="350"></svg>
+    <style>
+      :host {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      svg {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      .plottable .crosshairs line.guide-line {
+        stroke: #777;
+      }
+    </style>
+  </template>
+  <script src="../../scripts/dragZoomInteraction.js"></script>
+  <script src="../../scripts/tf-chart.js"></script>
+  <script>
+    Polymer({
+      is: 'my-chart',
+
+      properties: {
+        type: String, // "scalar" or "compressedHistogram"
+        _chart: Object,
+        colorScale: Object,
+        tag: String,
+        selectedRuns: Array,
+        xType: String,
+        data: {
+          type: Array,
+          value: function(){
+            return [];
+          },
+          notify: true
+        },
+        tooltipUpdater: Function,
+        _initialized: {
+          type: Boolean,
+          notify: true,
+          value:  false,
+          observer:'_makeChart'
+        },
+      },
+      observers: [
+        '_changeRuns(_chart, selectedRuns.*)'
+      ],
+      _changeRuns: function(chart, change) {
+        this._chart.changeRuns(this.selectedRuns);
+        this.redraw();
+      },
+      redraw: function() {
+        this._chart.redraw();
+      },
+      _constructor: function(type) {
+        console.log('myplottablechart constr');
+        if (type === 'scalar') {
+          return TF.LineChart;
+        } else if (type === 'compressedHistogram') {
+          return TF.HistogramChart;
+        } else {
+          throw new Error('Unrecognized chart type');
+        }
+      },
+
+      _makeChart: function() {
+        console.log('myplottablechart makechart called ');
+        var xScale = new Plottable.Scales.Linear();
+        var yScale = new Plottable.Scales.Linear();
+
+        var xAxis = new Plottable.Axes.Numeric(xScale, 'bottom');
+        var yAxis = new Plottable.Axes.Numeric(yScale, 'left');
+
+        var plot = new Plottable.Plots.Line();
+        plot.x(function(d) { return d.x; }, xScale);
+        plot.y(function(d) { return d.y; }, yScale);
+
+
+        console.log('data for fx rates');
+        console.log(this.$.fxratesval);
+        console.log(this.data);
+/*
+  var data = [
+    { 'x': 0, 'y': 1 },
+    { 'x': 1, 'y': 2 },
+    { 'x': 2, 'y': 4 },
+    { 'x': 3, 'y': 8 }
+  ];
+*/
+  var dataset = new Plottable.Dataset(this.data);
+  plot.addDataset(dataset);
+
+  var chart = new Plottable.Components.Table([
+    [yAxis, plot],
+    [null, xAxis]
+  ]);
+        var svg = d3.select(this.$.chartsvg);
+        this.async(function() {
+          chart.renderTo(svg);
+          this._chart = chart;
+        }, 350);
+      },
+
+      ready: function() {
+        console.log('myplottablechart ready ');
+      //  this._initialized = true;
+      },
+      attached: function() {
+        console.log('myplottablechart attached ');
+        this._initialized = true;
+      },
+      detached: function() {
+        console.log('myplottablechart detached');
+        this._initialized = false;
+      }
+    });
+  </script>
+</dom-module>
