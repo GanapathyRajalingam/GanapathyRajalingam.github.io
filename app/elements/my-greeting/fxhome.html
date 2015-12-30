@@ -124,6 +124,20 @@ paper-button.green[active] {
   text-align: center;
 }
 
+.intrates {
+  bottom: 6px;
+  top: 10px;
+  right: 18%;
+  position: absolute;
+  width: 10%;
+  height: 60%;
+  margin: 1px;
+  font-size: 10pt;
+  background-color: var(--paper-indigo-300);
+  color: white;
+  text-align: center;
+}
+
 .insert {
   position: relative;
   padding: 20px 30px 20px 10px;
@@ -206,9 +220,18 @@ paper-button.green[active] {
     background-color: var(--paper-grey-50)
   }
 
+  .fxratedisp {
+    position: relative;
+    margin: 1%;
+    width: 100%;
+    overflow: auto;
+    height: 85%;
+    bottom: 5%;
+    background-color: var(--paper-grey-50)
+  }
+
   .quickfxentry {
     position: relative;
-
     width: 80%;
     left: 10px;
     text-align: left;
@@ -340,6 +363,15 @@ paper-button.green[active] {
           last-response="{{fxratesd}}">
         </iron-ajax>
 
+        <iron-ajax
+            id="yieldcurvedata"
+            auto
+            url="../../data/yieldcurve.json"
+            params="{{param}}"
+            handle-as="json"
+            on-response="handleYieldCurveResponse"
+            last-response="{{usdlibor}}">
+          </iron-ajax>
 
       <paper-drawer-panel id="drawer" >
         <paper-header-panel main>
@@ -400,6 +432,7 @@ paper-button.green[active] {
         </paper-card> -->
 
         <paper-button  id="fxrates" class="fxrates" on-click="dispfxrates" data-dialog="fxratesdisp" raised>FX RATES</paper-button>
+        <paper-button  id="intrates" class="intrates" on-click="dispintrates" data-dialog="intratesdisp" raised>INT RATES</paper-button>
 <!--        <paper-button  id="fxblotter" class="favfoo green"  data-dialog="results" raised> Blotter </paper-button>
         <paper-input id="dealref"  label="Deal Num" type="String" value="{{dealref::input}}" ></paper-input>
         <paper-button  id="fetch" class="favfoo green" data-dialog="results" raised>Fetch</paper-button>
@@ -453,11 +486,16 @@ paper-button.green[active] {
 </paper-card>
 
 
-<paper-dialog id="fxratesdisp" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-  <div id="dispfxrate" width="950" height="950"> </div>
+<paper-dialog id="fxratesdisp" class="fxratedisp" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+  <div id="dispfxrate" > </div>
 
 </paper-dialog>
 
+
+<paper-dialog id="intratesdisp" class="fxratedisp" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+  <div id="dispintrate" > </div>
+
+</paper-dialog>
 
 <paper-dialog id="quickfxdialog" class="quickdealdialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
   <paper-drawer-panel id="fxdrawer" class="drawerpanel">
@@ -525,7 +563,7 @@ paper-button.green[active] {
       <paper-fab id="qadddeal" icon="icons:check" on-click="addDeal" class="qadd" disabled$="{{dataValid}}"></paper-fab>
     </paper-material>
 </section>
-
+      <!-- DYNAMIC INJECTION OF TEMPLATES happens here for TRADES INSERTED *************************   -->
       <div id="trades" class="flex layout horizontal wrap" >
 
       </div>
@@ -628,6 +666,7 @@ paper-button.green[active] {
                 'qadddeal.click': 'addDeal',
                 'quickfx':'dispquickdeals',
                 'fxrates.click': 'dispfxrates',
+                'intrates.click': 'dispintrates',
               },
 
               ready: function(){
@@ -755,6 +794,38 @@ paper-button.green[active] {
                   }
               },
 
+
+                            dispintrates: function(e) {
+                              console.log(' display int rates called');
+                              var button = e.target;
+                              if (!button.hasAttribute('data-dialog')) {
+                                return;
+                              }
+                              console.log('intrates  button clicked');
+
+                                var id = button.getAttribute('data-dialog');
+                                console.log(id);
+
+                                var el1 = this.$.el1 = document.createElement('my-chart');
+
+                                this.$.el1.data  = this.intratesval;
+                                console.log(this.intratesval);
+                                console.log(this.$.el1.data);
+                                console.log(el1);
+                                var dialog = document.getElementById(id);
+
+                                Polymer.dom(this.$.dispintrate).appendChild(el1);
+
+                                console.log(' Event trigerred');
+                                console.log(Polymer.dom(this.root));
+                                console.log(Polymer.dom(this.$.dispintrate));
+                                if (dialog) {
+                                  console.log(dialog);
+                                  //this.$.fxratesdisp.toggle();
+                                  this.$.intratesdisp.open();
+                                }
+                            },
+
               addDeal: function(e) {
                 console.log('add deal called ');
                 this.showdeal = true;
@@ -832,6 +903,15 @@ paper-button.green[active] {
                               this.showrates = true;
                               return;
                             },
+
+                                                        handleYieldCurveResponse: function(data){
+                                                          console.log('handle intrates called ');
+                                                          console.log(data);
+                                                          console.log(data.detail.response);
+                                                          this.intratesval = data.detail.response.chflibor;
+                                                          console.log(this.intratesval);
+                                                          return;
+                                                        },
 
                             handleDealDefValResponse: function(data){
                               console.log('Handle response called on deal Def val ajax call');
